@@ -14,8 +14,13 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-// Admin UID: only this user can delete messages
-const ADMIN_UID = "MtH6Avi6rMVkTxudlDdVWBUUWrw2";
+
+// Admins who can delete
+const ADMIN_UIDS = [
+  "MtH6Avi6rMVkTxudlDdVWBUUWrw2",
+  "RFFxXx7vogR7JTW0nNxzLfKSNON2"   // <-- phone UID 
+];
+
 
 // Anonymous login
 auth.signInAnonymously().catch(console.error);
