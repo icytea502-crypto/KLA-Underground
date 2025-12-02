@@ -14,6 +14,9 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+// Admin UID: only this user can delete messages
+const ADMIN_UID = "PUT_YOUR_ADMIN_UID_HERE";
+
 // Anonymous login
 auth.signInAnonymously().catch(console.error);
 
@@ -57,6 +60,15 @@ db.collection("messages")
       if (data.timestamp)
         li.innerHTML += `<div class="timestamp">${new Date(data.timestamp.toDate()).toLocaleString()}</div>`;
 
+  // Show delete button only if current user is admin
+      if (auth.currentUser && auth.currentUser.uid === ADMIN_UID) {
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("delete-btn"); // optional, for styling
+        deleteBtn.onclick = () => doc.ref.delete();
+        li.appendChild(deleteBtn);
+      }
+      
       messagesList.appendChild(li);
     });
   });
