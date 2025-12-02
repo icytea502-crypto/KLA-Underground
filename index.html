@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KLA Underground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>KLA Underground</h1>
+
+  <div id="chat">
+    <textarea id="message" placeholder="Type your message here"></textarea>
+    <button onclick="postMessage()">Post</button>
+    <ul id="messagesList"></ul>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
