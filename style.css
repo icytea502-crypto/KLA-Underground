@@ -4,17 +4,41 @@ body {
   color: #f1f1f1;
   text-align: center;
   padding: 20px;
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.post-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 textarea {
-  width: 300px;
+  width: 100%;
   height: 60px;
-  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  resize: none;
+}
+
+input[type="file"] {
+  border-radius: 5px;
+  padding: 5px;
 }
 
 button {
-  padding: 5px 15px;
-  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #ff1e56;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
@@ -25,8 +49,22 @@ ul {
 
 li {
   background: #2c2c2c;
-  margin: 5px auto;
+  margin: 10px 0;
   padding: 10px;
-  width: 300px;
+  border-radius: 8px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+li img {
+  max-width: 100%;
+  margin-top: 10px;
   border-radius: 5px;
+}
+
+.timestamp {
+  font-size: 0.75em;
+  color: #999;
+  margin-top: 5px;
+  text-align: right;
 }
