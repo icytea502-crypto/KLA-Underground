@@ -3,7 +3,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyCh59xkIYmNa3AEB786C62cFPnYLck3_Mo",
   authDomain: "kla-underground.firebaseapp.com",
   projectId: "kla-underground",
-  storageBucket: "storageBucket: "kla-underground.appspot.com",
+  storageBucket: "kla-underground.appspot.com",
   messagingSenderId: "39702040020",
   appId: "1:39702040020:web:2905b368096a09e5591a41"
 };
