@@ -29,11 +29,19 @@ async function postMessage() {
 
   let imageUrl = null;
 
-  if (file) {
-    const storageRef = storage.ref('images/' + Date.now() + '_' + file.name);
-    await storageRef.put(file);
-    imageUrl = await storageRef.getDownloadURL();
-  }
+  // Upload image to Cloudinary
+if (file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "KLA-UndergroundPreset"); // Cloudinary preset
+
+  const res = await fetch("https://api.cloudinary.com/v1_1/dw2d8pfj2/image/upload", {
+    method: "POST",
+    body: formData
+  });
+  const data = await res.json();
+  imageUrl = data.secure_url; // URL to store in Firestore
+}
 
   db.collection("messages").add({
     text: msg,
