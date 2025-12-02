@@ -2,15 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KLA Underground</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>KLA Underground</h1>
+  <div class="container">
+    <h1>KLA Underground</h1>
 
-  <div id="chat">
-    <textarea id="message" placeholder="Type your message here"></textarea>
-    <button onclick="postMessage()">Post</button>
+    <div class="post-box">
+      <textarea id="message" placeholder="Type your message here"></textarea>
+      <input type="file" id="imageInput">
+      <button onclick="postMessage()">Post</button>
+    </div>
+
     <ul id="messagesList"></ul>
   </div>
 
@@ -18,6 +23,7 @@
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
