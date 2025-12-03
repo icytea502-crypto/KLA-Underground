@@ -68,3 +68,33 @@ li img {
   margin-top: 5px;
   text-align: right;
 }
+
+.subject-box {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #222;
+  padding: 10px;
+}
+
+.subject-header {
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.teachers {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  padding-left: 15px;
+}
+
+.teachers.open {
+  max-height: 500px;
+}
+
+.teacher {
+  padding: 5px 0;
+  font-size: 16px;
+}
