@@ -77,7 +77,3 @@ db.collection("messages")
       }
       
       messagesList.appendChild(li);
-
-    });
-  });
-
