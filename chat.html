@@ -6,31 +6,35 @@
   <title>KLA Underground</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+
   <div class="container">
     <h1>KLA Underground</h1>
 
+    <!-- Message input -->
     <div class="post-box">
       <textarea id="message" placeholder="Type your message here"></textarea>
       <input type="file" id="imageInput">
       <button onclick="postMessage()">Post</button>
     </div>
 
+    <!-- Messages list -->
     <ul id="messagesList"></ul>
   </div>
 
-  <!-- Subjects & Teachers -->
+  <!-- Subjects container -->
   <div id="subjects"></div>
 
-  <!-- Firebase -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+
+  <!-- Main script -->
   <script src="script.js"></script>
 
-  <!-- SUBJECTS SCRIPT -->
+  <!-- Subjects script -->
   <script>
     fetch("subjects.json")
       .then(res => res.json())
@@ -38,22 +42,37 @@
         const container = document.getElementById("subjects");
 
         for (const subject in data) {
+          // Create subject box
           const box = document.createElement("div");
           box.classList.add("subject-box");
 
-          box.innerHTML = `
-            <div class="subject-header">${subject}</div>
-            <div class="teachers" style="display:none;">
-              ${data[subject]
-                .map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`)
-                .join("")}
-            </div>
-          `;
+          // Add subject header
+          const header = document.createElement("div");
+          header.classList.add("subject-header");
+          header.textContent = subject;
 
+          // Add teachers container
+          const teachersDiv = document.createElement("div");
+          teachersDiv.classList.add("teachers");
+          teachersDiv.style.display = "none";
+
+          // Add each teacher
+          data[subject].forEach(teacher => {
+            const tDiv = document.createElement("div");
+            tDiv.classList.add("teacher");
+            tDiv.dataset.subject = subject;
+            tDiv.dataset.teacher = teacher;
+            tDiv.textContent = teacher;
+            teachersDiv.appendChild(tDiv);
+          });
+
+          // Add header and teachers to box
+          box.appendChild(header);
+          box.appendChild(teachersDiv);
           container.appendChild(box);
         }
 
-        // expand/collapse subjects
+        // Expand/collapse subjects
         document.querySelectorAll(".subject-header").forEach(header => {
           header.addEventListener("click", () => {
             const teachers = header.nextElementSibling;
@@ -61,20 +80,18 @@
           });
         });
 
-        // Click teacher → open new chat room
+        // Click teacher → open chat room
         document.addEventListener("click", e => {
           if (e.target.classList.contains("teacher")) {
             const subject = e.target.dataset.subject;
             const teacher = e.target.dataset.teacher;
-
-            const roomId = `${subject}_${teacher}`
-              .replace(/\s+/g, "")
-              .replace(/[^a-zA-Z0-9]/g, "");
-
+            const roomId = `${subject}_${teacher}`.replace(/\s+/g, "").replace(/[^a-zA-Z0-9]/g, "");
             window.location.href = `chat.html?room=${roomId}`;
           }
         });
-      });
+
+      })
+      .catch(err => console.error("Failed to load subjects.json:", err));
   </script>
 
 </body>
