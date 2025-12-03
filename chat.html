@@ -46,19 +46,51 @@ fetch("subjects.json")
 
       container.appendChild(box);
     }
+<script>
+  // Load subjects.json
+  fetch("subjects.json")
+    .then(r => r.json())
+    .then(data => {
+      const container = document.getElementById("subjectsContainer");
 
-    // Click to expand/collapse
-    document.querySelectorAll(".subject-header").forEach(header => {
-      header.addEventListener("click", () => {
-        header.nextElementSibling.classList.toggle("open");
+      for (const subject in data) {
+        const subjectDiv = document.createElement("div");
+        subjectDiv.classList.add("subject");
+
+        subjectDiv.innerHTML = `
+          <div class="subject-header">${subject}</div>
+          <div class="teachers" style="display:none;">
+            ${data[subject]
+              .map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`)
+              .join("")}
+          </div>
+        `;
+
+        container.appendChild(subjectDiv);
+      }
+
+      // Expand/collapse subjects
+      document.querySelectorAll(".subject-header").forEach(header => {
+        header.addEventListener("click", () => {
+          header.nextElementSibling.style.display =
+            header.nextElementSibling.style.display === "none"
+              ? "block"
+              : "none";
+        });
+      });
+
+      // Clicking a teacher opens their chat
+      document.addEventListener("click", e => {
+        if (e.target.classList.contains("teacher")) {
+          const subject = e.target.dataset.subject;
+          const teacher = e.target.dataset.teacher;
+
+          const roomId = `${subject}_${teacher}`
+            .replace(/\s+/g, "")          // remove spaces
+            .replace(/[^a-zA-Z0-9]/g, ""); // remove weird chars
+
+          window.location.href = `chat.html?room=${roomId}`;
+        }
       });
     });
-  });
 </script>
-
-</body>
-</html>
-
-  
-</body>
-</html>
