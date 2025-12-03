@@ -40,7 +40,7 @@ fetch("subjects.json")
       box.innerHTML = `
         <div class="subject-header">${subject}</div>
         <div class="teachers">
-          ${data[subject].map(t => `<div class="teacher">${t}</div>`).join("")}
+          ${data[subject].map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`).join("")}
         </div>
       `;
 
