@@ -1,5 +1,5 @@
 // ------------------------
-//  Firebase config
+// Initialize Firebase
 // ------------------------
 const firebaseConfig = {
   apiKey: "AIzaSyCh59xkIYmNa3AEB786C62cFPnYLck3_Mo",
@@ -11,12 +11,26 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
+
 // ------------------------
-//  Get ROOM ID from URL
+// Admin UID
+// ------------------------
+const ADMIN_UID = "MtH6Avi6rMVkTxudlDdVWBUUWrw2";
+
+
+// ------------------------
+// Login anonymous
+// ------------------------
+auth.signInAnonymously().catch(console.error);
+
+
+// ------------------------
+// Get chat room from URL
 // ------------------------
 function getRoomId() {
   const url = new URL(window.location.href);
@@ -25,13 +39,9 @@ function getRoomId() {
 
 const ROOM_ID = getRoomId();
 
-// ------------------------
-//  Login anonymously
-// ------------------------
-auth.signInAnonymously().catch(console.error);
 
 // ------------------------
-//  Post Message
+// Post message
 // ------------------------
 async function postMessage() {
   const text = document.getElementById("message").value.trim();
@@ -41,7 +51,6 @@ async function postMessage() {
 
   let imageUrl = null;
 
-  // Upload image to Cloudinary
   if (file) {
     const formData = new FormData();
     formData.append("file", file);
@@ -53,15 +62,10 @@ async function postMessage() {
     });
 
     const data = await res.json();
-    if (data.secure_url) imageUrl = data.secure_url;
-    else {
-      alert("Image upload failed.");
-      return;
-    }
+    imageUrl = data.secure_url;
   }
 
-  // Save to Firestore in correct room
-  await db.collection("messages")
+  db.collection("messages")
     .doc(ROOM_ID)
     .collection("roomMessages")
     .add({
@@ -74,8 +78,9 @@ async function postMessage() {
   document.getElementById("imageInput").value = "";
 }
 
+
 // ------------------------
-//  Load Messages
+// Load messages
 // ------------------------
 function loadMessages() {
   const list = document.getElementById("messagesList");
@@ -89,21 +94,15 @@ function loadMessages() {
       list.innerHTML = "";
 
       snapshot.forEach(doc => {
-        const msg = doc.data();
+        const data = doc.data();
         const li = document.createElement("li");
-        li.classList.add("message");
 
-        if (msg.text) {
-          const p = document.createElement("p");
-          p.textContent = msg.text;
-          li.appendChild(p);
+        if (data.text) {
+          li.innerHTML += `<div>${data.text}</div>`;
         }
 
-        if (msg.image) {
-          const img = document.createElement("img");
-          img.src = msg.image;
-          img.classList.add("chat-image");
-          li.appendChild(img);
+        if (data.image) {
+          li.innerHTML += `<img src="${data.image}" alt="image">`;
         }
 
         list.appendChild(li);
