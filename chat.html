@@ -6,6 +6,7 @@
   <title>KLA Underground</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container">
     <h1>KLA Underground</h1>
@@ -19,78 +20,62 @@
     <ul id="messagesList"></ul>
   </div>
 
-<div id="subjects"></div>
-  
-  <!-- Firebase SDKs -->
+  <!-- Subjects & Teachers -->
+  <div id="subjects"></div>
+
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
   <script src="script.js"></script>
-<script>
-fetch("subjects.json")
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("subjects");
 
-    for (const subject in data) {
-      const box = document.createElement("div");
-      box.classList.add("subject-box");
+  <!-- SUBJECTS SCRIPT -->
+  <script>
+    fetch("subjects.json")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("subjects");
 
-      box.innerHTML = `
-        <div class="subject-header">${subject}</div>
-        <div class="teachers">
-          ${data[subject].map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`).join("")}
-        </div>
-      `;
+        for (const subject in data) {
+          const box = document.createElement("div");
+          box.classList.add("subject-box");
 
-      container.appendChild(box);
-    }
-<script>
-  // Load subjects.json
-  fetch("subjects.json")
-    .then(r => r.json())
-    .then(data => {
-      const container = document.getElementById("subjectsContainer");
+          box.innerHTML = `
+            <div class="subject-header">${subject}</div>
+            <div class="teachers" style="display:none;">
+              ${data[subject]
+                .map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`)
+                .join("")}
+            </div>
+          `;
 
-      for (const subject in data) {
-        const subjectDiv = document.createElement("div");
-        subjectDiv.classList.add("subject");
+          container.appendChild(box);
+        }
 
-        subjectDiv.innerHTML = `
-          <div class="subject-header">${subject}</div>
-          <div class="teachers" style="display:none;">
-            ${data[subject]
-              .map(t => `<div class="teacher" data-subject="${subject}" data-teacher="${t}">${t}</div>`)
-              .join("")}
-          </div>
-        `;
+        // expand/collapse subjects
+        document.querySelectorAll(".subject-header").forEach(header => {
+          header.addEventListener("click", () => {
+            const teachers = header.nextElementSibling;
+            teachers.style.display = teachers.style.display === "none" ? "block" : "none";
+          });
+        });
 
-        container.appendChild(subjectDiv);
-      }
+        // Click teacher → open new chat room
+        document.addEventListener("click", e => {
+          if (e.target.classList.contains("teacher")) {
+            const subject = e.target.dataset.subject;
+            const teacher = e.target.dataset.teacher;
 
-      // Expand/collapse subjects
-      document.querySelectorAll(".subject-header").forEach(header => {
-        header.addEventListener("click", () => {
-          header.nextElementSibling.style.display =
-            header.nextElementSibling.style.display === "none"
-              ? "block"
-              : "none";
+            const roomId = `${subject}_${teacher}`
+              .replace(/\s+/g, "")
+              .replace(/[^a-zA-Z0-9]/g, "");
+
+            window.location.href = `chat.html?room=${roomId}`;
+          }
         });
       });
+  </script>
 
-      // Clicking a teacher opens their chat
-      document.addEventListener("click", e => {
-        if (e.target.classList.contains("teacher")) {
-          const subject = e.target.dataset.subject;
-          const teacher = e.target.dataset.teacher;
-
-          const roomId = `${subject}_${teacher}`
-            .replace(/\s+/g, "")          // remove spaces
-            .replace(/[^a-zA-Z0-9]/g, ""); // remove weird chars
-
-          window.location.href = `chat.html?room=${roomId}`;
-        }
-      });
-    });
-</script>
+</body>
+</html>
