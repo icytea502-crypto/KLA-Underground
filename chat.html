@@ -19,11 +19,46 @@
     <ul id="messagesList"></ul>
   </div>
 
+<div id="subjects"></div>
+  
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
   <script src="script.js"></script>
+<script>
+fetch("subjects.json")
+  .then(res => res.json())
+  .then(data => {
+    const container = document.getElementById("subjects");
+
+    for (const subject in data) {
+      const box = document.createElement("div");
+      box.classList.add("subject-box");
+
+      box.innerHTML = `
+        <div class="subject-header">${subject}</div>
+        <div class="teachers">
+          ${data[subject].map(t => `<div class="teacher">${t}</div>`).join("")}
+        </div>
+      `;
+
+      container.appendChild(box);
+    }
+
+    // Click to expand/collapse
+    document.querySelectorAll(".subject-header").forEach(header => {
+      header.addEventListener("click", () => {
+        header.nextElementSibling.classList.toggle("open");
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
+
+  
 </body>
 </html>
